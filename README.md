@@ -47,8 +47,6 @@ To this date, Gaby AI is an autonomous data cleaning agent using BigQuery AI as 
 │       │   └── schema.py    # Database schema definitions and validation
 │       ├── data             # Data processing utilities and transformations
 │       └── utils            # Common utilities and helper functions
-│           └── __init__.py  # Package initialization
-└── tests                    # Unit tests and integration test suites
 ```
 
 ## Objective
