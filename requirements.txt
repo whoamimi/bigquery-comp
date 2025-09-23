@@ -1,0 +1,17 @@
+streamlit
+streamlit-pandas-profiling
+pandas
+plotly
+altair
+requests
+db-dtypes
+google-cloud-aiplatform
+google-cloud-bigquery
+google-auth
+python-dotenv
+ollama
+numpy
+seaborn
+matplotlib
+tabulate
+statsmodels

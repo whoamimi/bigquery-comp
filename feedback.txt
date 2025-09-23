@@ -1,0 +1,24 @@
+# Team Survey: BigQuery AI - Building the Future of Data
+
+**Instructions:**
+
+* This survey is for bonus points.
+* Points are awarded for completeness, not for the content of your answers.
+* We highly encourage everyone to submit one.
+* There are 3 questions in total - please answer all 3.
+
+---
+
+## Team Member Experience
+
+1) **BigQuery AI:** Please list each team member(s) months of experience with BigQuery AI.
+   * Team Member 1 (Mimi Phan): 1 week
+
+2) **Google Cloud:** Please list each team member(s) months of experience with Google Cloud.
+   * Team Member 1 (Mimi Phan): 1 month
+
+---
+
+## Feedback
+
+BigQuery AI was an excellent platform for this hackathon because it allowed me to combine SQL-native querying with AI/ML methods in a way that felt natural and efficient. Embedding reinforcement learning logic through functions like `AI.GENERATE` and `ML.FORECAST` gave me the ability to prototype intelligent, adaptive pipelines entirely inside BigQuery without heavy infrastructure overhead. The responsiveness and scalability were impressive, with sub-second turnaround times for tasks that would normally take hours. My only suggestion would be to expand documentation and examples for advanced workflows (e.g., reinforcement learning or multi-agent orchestration) so participants can more easily explore cutting-edge use cases.

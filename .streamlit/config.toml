@@ -1,0 +1,28 @@
+[theme]
+base = "dark"
+
+# General color setup
+textColor = "#ffffff"
+primaryColor = "#00d492"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#262730"
+
+# Widgets
+showWidgetBorder = true
+borderColor = "#404040"
+
+# Base text
+font = "Open Sans"
+baseFontWeight = 400
+baseFontSize = 14
+
+# Heading text
+headingFont = "Open Sans"
+headingFontWeights = [600, 300, 600]
+headingFontSizes = ["3rem", "2rem", "1rem"]
+
+[[theme.fontFaces]]
+family = "Open Sans"
+style = "normal"
+weight = "300 800"
+url = "https://fonts.gstatic.com/s/opensans/v43/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-mu0SC55I.woff2"

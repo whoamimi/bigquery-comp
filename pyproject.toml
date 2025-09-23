@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gaby-data-analyst"
+version = "0.1.0"
+description = "Gaby AI is a Data Insights & Analytst working as a virtual companion to data teams."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Mimi Phan" }]
+
+# Keep dependencies in requirements.txt
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

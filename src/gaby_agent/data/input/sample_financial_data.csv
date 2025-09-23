@@ -1,0 +1,19 @@
+transaction_id,date,account_type,description,amount,category,balance_after
+T001,2024-01-15,Checking,Coffee Shop Purchase,-4.50,Food & Dining,2495.50
+T002,01/15/2024,checking,Salary Deposit,3500.00,Income,5995.50
+T003,2024-01-16,Savings,Interest Payment,12.50,interest,10012.50
+T004,,Checking,Grocery Store,-89.75,Food & Dining,5905.75
+T005,2024-01-18,Checking,Gas Station,-45.20,Transportation,5860.55
+T006,2024-01-19,credit card,Online Shopping,-299.99,Shopping,
+T007,2024-01-20,Checking,Rent Payment,-1200.00,Housing,4660.55
+T008,2024/01/22,Checking,Utility Bill,-125.80,Utilities,4534.75
+T009,2024-01-23,Savings,Transfer from Checking,-500.00,Transfer,9512.50
+T010,2024-01-23,Checking,Transfer to Savings,500,Transfer,4034.75
+T011,2024-01-24,Checking,Restaurant,-67.45,Food & Dining,3967.30
+,2024-01-25,Checking,ATM Withdrawal,-100.00,Cash,3867.30
+T013,2024-01-26,Credit Card,Gym Membership,-49.99,Health & Fitness,
+T014,2024-01-28,Checking,Freelance Payment,750.00,income,4617.30
+T015,30/01/2024,Checking,Phone Bill,-89.99,Utilities,4527.31
+T016,2024-01-31,Checking,DUPLICATE ENTRY,-89.99,Utilities,4437.32
+T017,2024-02-01,Checking,Coffee Shop Purchase,-999999.99,Food & Dining,-995562.67
+T018,2024-02-02,Chequing,Salary Deposit,3500.00,Income,2937.33

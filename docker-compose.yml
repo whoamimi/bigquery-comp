@@ -1,0 +1,105 @@
+services:
+  webapp:
+    build:
+      # https://www.docker.com/blog/llm-docker-for-local-and-hugging-face-hosting/
+      dockerfile_inline: |
+        FROM python:3.12-slim
+
+        # Create a non-root user
+        RUN useradd -m -u 1000 user
+        RUN chsh -s /bin/bash user
+
+        # Install system dependencies
+        RUN apt-get update && apt-get install -y \
+            curl \
+            gcc \
+            make \
+            build-essential \
+            ca-certificates \
+            bash \
+        && rm -rf /var/lib/apt/lists/*
+
+        # Set project path
+        ENV PYTHONPATH=/code
+
+        # Copy requirements and install
+        COPY requirements.txt .
+        RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+        # Copy project files
+        COPY . /code
+        RUN chown -R user:user /code
+
+        # Switch to non-root user
+        WORKDIR /code
+        USER user
+
+        # Run Streamlit app
+        CMD ["streamlit", "run", "app.py", "--server.port=8005", "--server.address=0.0.0.0"]
+    container_name: gaby_app
+    depends_on:
+      - ollama
+    env_file:
+      - .env.local
+    ports:
+      - 8005:8005
+    expose:
+      - 8005
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_HOST_URL=http://ollama:11434
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/user/.config/gcloud/application_default_credentials.json
+    networks:
+      - gaby-network
+    volumes:
+      - ollama-data:/code/server
+      - ~/.config/gcloud/application_default_credentials.json:/home/user/.config/gcloud/application_default_credentials.json:ro
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_server
+    ports:
+      - 11434:11434
+    expose:
+      - 11434
+    volumes:
+      #- ./server:/root/.ollama
+      - ollama-data:/root/.ollama
+    pull_policy: always
+    tty: true
+    networks:
+      - gaby-network
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        ollama serve
+        ollama pull hf.co/bartowski/Llama-3.2-3B-Instruct-GGUF:Q5_K_S && 
+
+  agent-playground:
+    image: python:3.12-slim
+    container_name: agent_sandbox
+    working_dir: /
+    tty: true
+    networks:
+      - gaby-network
+    volumes:
+      - ollama-data:/workspace   # isolated workspace
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'       # quarter CPU
+          memory: 128M       # very small memory cap
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  ollama-data:
+
+
+networks:
+  gaby-network:
+    driver: bridge

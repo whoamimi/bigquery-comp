@@ -1,0 +1,16 @@
+customer_id,name,email,age,gender,city,state,signup_date,total_purchases,last_purchase_amount
+1001,John Smith,john.smith@email.com,34,M,New York,NY,2023-01-15,5,149.99
+1002,Sarah Johnson,sarah.j@email.com,28,F,Los Angeles,CA,2023-02-20,12,89.50
+1003,Mike Brown,mike.brown@email.com,45,M,Chicago,IL,01/08/2023,3,299.99
+1004,Emily Davis,,31,F,Houston,TX,2023-03-10,8,199.75
+1005,David Wilson,david.w@email.com,52,Male,Phoenix,AZ,2023-01-25,15,75.25
+1006,Lisa Anderson,lisa.anderson@email.com,29,F,Philadelphia,PA,2023-02-14,6,159.99
+1007,Chris Taylor,chris.taylor@email.com,38,M,San Antonio,TX,03/05/2023,9,249.50
+1008,Amanda White,amanda.white@gmail.com,26,Female,San Diego,CA,2023-01-30,4,179.99
+1009,Ryan Miller,ryan.miller@email.com,41,M,Dallas,TX,2023-02-28,,129.99
+1010,Jessica Garcia,jessica.garcia@email.com,33,F,San Jose,CA,2023-03-15,7,199.25
+1011,John Smith,john.smith@email.com,34,M,New York,NY,2023-01-15,5,149.99
+1012,Robert Johnson,robert.johnson@invalid-email,45,M,Miami,FL,2023-04-01,2,89.99
+1013,Jennifer Wilson,jennifer.w@email.com,999,F,Seattle,WA,2023-04-15,1,299.00
+1014,,test@email.com,25,F,Portland,OR,2023-05-01,3,150.00
+1015,Michael Davis,michael.davis@email.com,-5,M,Boston,MA,2023-05-15,8,200.50
