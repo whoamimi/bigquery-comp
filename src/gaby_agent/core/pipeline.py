@@ -1,13 +1,26 @@
-""" pipeline.py """
+"""
+
+pipeline.py
+
+Main Data Processing / Cleaning pipeline.
+"""
 
 import pandas as pd
 from uuid import uuid4
 from datetime import datetime
-from dataclasses import dataclass
-from agent.cleaner import DatasetSummarizer, DataFieldMetaDescription
-from gatekeeper._wrapper import upload_dataframe_to_bq
+from dataclasses import dataclass, field
+
+from schema import EntryReport
 from config import EpisodeConfig
-from schemas.episode import EntryReport
+from agent import (
+    DatasetSummarizer,
+    DataFieldMetaDescription
+)
+from gatekeeper import (
+    upload_dataframe_to_bq,
+    describe_data_field,
+    detect_numeric_field
+)
 
 @dataclass
 class DataProfiler:
@@ -25,7 +38,7 @@ class DataProfiler:
     # Episode ID & Configuration
     episode_id: str = uuid4().hex
     timestamp: str = datetime.now().isoformat()
-    config: EpisodeConfig | None = None
+    config: EpisodeConfig = field(init=False)
 
     def __post_init__(self):
         try:
@@ -69,13 +82,13 @@ class DataProfiler:
             raise ValueError("The provided DataFrame is empty or data origin is not specified. Both these are required to start the workflow.")
 
         # assuming have loaded the model and returned it
-        self.data_field_summary = pd.DataFrame.from_records(list(summarize_dataframe(self.data)))
+        self.data_field_summary = pd.DataFrame.from_records(list(self.summarize_dataframe(self.data)))
 
         print(f"✅ Dataset defined with {self.data.shape[0]} rows and {self.data.shape[1]} columns.")
 
         if upload_summary is True:
-            upload_dataframe_to_bq(self.data, self.config.bq_model_connection, self.config.bq_dataset_id, self.config.default_table_id)
-            upload_dataframe_to_bq(self.data_field_summary, self.config.bq_model_connection, self.config.bq_dataset_id, self.config.default_dataset_id)
+            upload_dataframe_to_bq(self.data, self.config.dataset_id)
+            upload_dataframe_to_bq(self.data_field_summary, self.config.summary_id)
 
         print(f"Completed profiling for dataset id: {self.episode_id} and uploaded to BQ.")
 
@@ -98,32 +111,30 @@ class DataProfiler:
 
         return context_prompt
 
-    def data_cleaning_pipeline(report: DataProfiler) -> DataProfiler:
+    @staticmethod
+    def data_cleaning_pipeline(report: "DataProfiler"):
         """ Main function to run the data cleaning pipeline. """
 
         report.description = DatasetSummarizer().run(
-            user_inputs=report.user_input,
+            user_inputs=report.user_input_tags,
             data_table=report.data.head(3).to_string(index=False)
         )
 
         try:
             report.data_field_description = describe_data_field(
-                connection_id=report.config.bq_model_connection,
-                model_endpoint=report.config.default_model_type,
-            )
-
-            report.numeric_table = detect_numeric_field(
-                connection_id=report.config.bq_model_connection,
-                endpoint=report.config.default_model_type,
                 data_summary_id=report.config.summary_id
-            )
+            ) # type: ignore
+            report.numeric_table = detect_numeric_field(
+                data_summary_id=report.config.summary_id
+            ) # type: ignore
+
         except Exception as e:
             print("Error using GCP model, falling back to local model (takes longer to run):", e)
 
             report.data_field_description = DataFieldMetaDescription().run_loop(
-                data=report.data,
+                data=report.data.head(10),
                 data_description=report.description
-            )
+            ) # type: ignore
             report.numeric_table = None
 
         return report

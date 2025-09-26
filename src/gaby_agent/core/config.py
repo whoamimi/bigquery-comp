@@ -7,7 +7,7 @@ TODO: Use Pydantic... the inheritance class is pissing me off
 """
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 # BigQuery Model Configuration
@@ -53,8 +53,9 @@ class Config:
 @dataclass
 class EpisodeConfig:
     input_id: str
-    summary_id: str | None = None
-    dataset_id: str | None = None
+    summary_id: str = field(init=False, default="")
+    dataset_id: str = field(init=False, default="")
+
     # BIGQUERY MODEL STORED LOCS
     bq_model_connection: str | None = None
     bq_model_endpoint: str | None = None

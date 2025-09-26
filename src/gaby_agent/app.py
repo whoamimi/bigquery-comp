@@ -1,10 +1,19 @@
 """
-Gaby AI Data Companion - Simplified
+
+Demo Test WebApp.
 A lightweight Streamlit app for file upload, preview, tagging, and AI assistant view.
+
+User Input:
+    - Dataset (Ideally IP Address Connection but this will do for now)
+    - Input tags
+Gaby's Window Output:
+    1. Reasoning Steps
+    2. Summary Report End of each stage.
+
 """
 
-import streamlit as st
 import pandas as pd
+import streamlit as st
 from pathlib import Path
 
 # ---------------- CONFIG ----------------
