@@ -7,8 +7,21 @@ TODO: Use Pydantic... the inheritance class is pissing me off
 """
 
 import os
+import sys
+from pathlib import Path
+
+from dotenv import load_dotenv
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Literal
+
+load_dotenv('.env.local')
+
+# Local Configs
+LIGHTNING_OLLAMA_HOST_URL = os.getenv("LIGHTNING_OLLAMA_HOST_URL", "")
+LOCAL_OLLAMA_HOST_URL = os.getenv("LOCAL_OLLAMA_HOST_URL", "")
+AGENT_SANDBOX_URL = os.getenv("AGENT_SANDBOX_URL", "")
+# BASE_GUFF_LLM_MODEL = os.getenv("BASE_GUFF_LLM_MODEL", "")
+DEBUG_LEVEL = os.getenv("DEBUG", True)
 
 # BigQuery Model Configuration
 BQ_MODEL_CONNECTION: Optional[str] = os.getenv("BQ_MODEL_CONNECTION")
@@ -82,3 +95,78 @@ class EpisodeConfig:
         self.dataset_id = f"{self.default_project_id}.{self.default_dataset_id}.{self.input_id}_{DATASET_ACTION_ID}"
         self.summary_id = f"{self.default_project_id}.{self.default_dataset_id}.{self.input_id}_{DATASET_OBSERVATION_ID}"
 
+@dataclass
+class ModelConfig:
+    dev: Optional[str] = field(default=None, repr=False)
+    prod: Optional[str] = field(default=None, repr=False)
+    url: str = field(default="", repr=True)
+    alt: list[str] = field(default_factory=list, repr=False)
+
+    model_id: str = field(init=False, repr=True)
+    source: Literal['dev', 'prod'] = field(default="dev", repr=False)
+
+    def __post_init__(self):
+        if self.source is None:
+            raise AttributeError(
+                f"Missing model id for workspace '{self.workspace}'. "
+                "Please update the model configuration YAML ('config_models.yaml')."
+            )
+        else:
+            self.model_id = self.dev if self.source == 'dev' else self.prod
+
+def load_agent_stack():
+    import yaml
+
+    with open("config_models.yaml", "r") as f:
+        for file in yaml.safe_load(f):
+            yield {
+                file.get('model_name'):
+                    ModelConfig(
+                        dev=file.get('model_id').get('dev', None) if file.get('model_id') else None,
+                        prod=file.get('model_id').get('prod', None) if file.get('model_id') else None,
+                        url=file.get('url', None),
+                        alt=file.get('alt', None)
+                    )
+            }
+
+@dataclass(frozen=True)
+class LocalConfig:
+    """ Endpoint Connection to exertanl servers. """
+    lightning_ollama: str = LIGHTNING_OLLAMA_HOST_URL
+    local_ollama: str = LOCAL_OLLAMA_HOST_URL
+    agent_sandbox: str = AGENT_SANDBOX_URL
+
+    @property
+    def model_stack(self) -> list:
+        return list(load_agent_stack())
+
+    def get_model(self, model_name: str):
+        """ Get the model config by name. Returns the first matched model name and its Model config. """
+        
+        for i in load_agent_stack():
+            if model_name in i:
+                return i.get(model_name)
+        return None
+
+def setup_dev_workspace(root_folder_name: str = 'gaby'):
+    """ Call in files / notebooks if running workspace in sub-directory path. """
+
+    if Path.cwd().stem == root_folder_name:
+        print(f'Path already set to default root directory: {Path.cwd()}')
+        return
+    else:
+        print('Initialized workspace currently at directory:', Path.cwd())
+
+    current = Path().resolve()
+    for parent in [current, *current.parents]:
+        if parent.name == root_folder_name:
+            os.chdir(parent)  # change working directory
+            print(f"📂 Working directory set to: {parent}")
+            return # Exit after changing directory
+
+    raise FileNotFoundError(f"Root folder '{root_folder_name}' not found.")
+
+
+if __name__ == "__main__":
+    config = LocalConfig()
+    print(config.get_model('base'))

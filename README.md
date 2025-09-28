@@ -27,6 +27,8 @@ To this date, Gaby AI is an autonomous data cleaning agent using BigQuery AI as 
 .
 ├── docker-compose.yml          # Setup Agent with Dockers.
 ├── notebooks                  # Jupyter notebooks for experimentation and analysis
+│   └── workspace           # Stores scrapbooks
+│   └── docs                 # Docs on agent based processes and ETL pipelines usage
 ├── pyproject.toml            # Modern Python project configuration and dependencies
 ├── README.md                 # Project documentation and setup instructions
 ├── requirements.txt          # Python package dependencies

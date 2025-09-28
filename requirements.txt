@@ -15,3 +15,8 @@ seaborn
 matplotlib
 tabulate
 statsmodels
+
+
+sentence-transformers
+transformers
+huggingface-hub

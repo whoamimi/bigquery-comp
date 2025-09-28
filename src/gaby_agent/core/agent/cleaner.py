@@ -1,7 +1,8 @@
 """ clean_stage_a.py """
 
 import pandas as pd
-from agent._core import GabyBasement, Instructor
+from ._core import GabyBasement, Instructor
+from ._utils import agent_toolbox, TOOLS_REGISTRY
 
 class DatasetSummarizer(
     GabyBasement,
@@ -17,7 +18,8 @@ class DatasetSummarizer(
         Dataset Subset:
         {data_table}
         """
-    )
+    ),
+    model_name="base_agent"
 ):
     pass
 
@@ -30,7 +32,8 @@ class DataFieldMetaDescription(
         Data Field Label: {data_label}
         Data Sample: {data_sample}
         """
-    )
+    ),
+    model_name="base_agent"
 ):
     def run_loop(self, data: pd.DataFrame, data_description: str) -> dict:
         """ Run the description for each data field in the dataframe. """

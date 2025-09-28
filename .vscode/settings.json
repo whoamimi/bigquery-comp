@@ -3,5 +3,10 @@
     "notebook.formatOnSave.enabled": true,
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
-    "editor.formatOnType": false
+    "editor.formatOnType": true,
+    "workbench.colorTheme": "Cherry Blossom Dimmed",
+    "workbench.preferredDarkColorTheme": "Cherry Blossom Dimmed",
+    "workbench.preferredHighContrastColorTheme": "Cherry Blossom Dimmed",
+    "workbench.preferredHighContrastLightColorTheme": "Cherry Blossom Warm",
+    "workbench.preferredLightColorTheme": "Cherry Blossom Warm"
 }
